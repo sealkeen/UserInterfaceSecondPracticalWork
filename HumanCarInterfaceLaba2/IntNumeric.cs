@@ -10,6 +10,8 @@ namespace HumanCarInterfaceLaba2
     {
         //new public double Value { get; set; }
         public double Val { get { return (double)base.Value; } set { base.Value = (decimal)value ; } }
+
+        //Optional method
         public static int CompareDoubles(ref double sourceNumber, ref double valueNumber)
         {
             if (sourceNumber > valueNumber)
@@ -18,6 +20,8 @@ namespace HumanCarInterfaceLaba2
                 return -1;
                         return 0;
         }
+
+        //Returning precision of the passed variable
         public static int GetPrecision(double sourceVar)
         {
             int cnt = 0;

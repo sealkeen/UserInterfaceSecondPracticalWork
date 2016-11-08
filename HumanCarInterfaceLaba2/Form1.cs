@@ -7,23 +7,26 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Threading;
 
-namespace HumanCarInterfaceLaba2
-{
-    public partial class frmReversed : Form
+namespace HumanCarInterfaceLaba2        //Код на Visual C# 6.0 
+{  
+    public partial class frmReversed : Form 
     {
-        private double A;
-        private double B;
-        private double divider; //Код на Visual C# 6.0 
-        string outA;
-        string outB;
+        private double A;           //Число A
+        private double B;           //Число B
+        private double divider;     //Знаменатель дроби
+        string outA;                //Строка вывода числа A в текстовое поле.
+        string outB;                //Строка вывода числа B в текстовое поле.
+
+        //Using common constructor
         public frmReversed()
         {
-            InitializeComponent(); //Авто-генерированнный код
+            InitializeComponent();      
             A =  this.numA.Val; outA = A.ToString();
             B =  this.numB.Val; outB = B.ToString();
             divider =  A*A + B*B;
-            numA_ValueChanged(this.numA, new EventArgs());
+
             SetInputLabelText($"{outA}+{outB}*i");
         }
 
@@ -54,15 +57,20 @@ namespace HumanCarInterfaceLaba2
 
         private void btnReverse_Click(object sender, EventArgs e)
         {
-            int underlCnt = lblInput.Text.Count();
+            int underlCnt = lblInput.Text.Count() - "Исходное число: ".Count(); //Approximate count of underlines of the fractional line 
+
             divider = A * A + B * B; 
             lblOutput.Text = $"{outA}+{outB}*i\n{generateUndrlns(underlCnt)}\n{divider}";
+
+            toolStripFirstLabel.Text = "Выполнена попытка обратить число.";
         }
 
         private void lblOutput_Click(object sender, EventArgs e)
         {
             
         }
+
+        //Generate underlines for the fractional line
         private string generateUndrlns(int count)
         {
             string s = "";
@@ -72,7 +80,8 @@ namespace HumanCarInterfaceLaba2
             }
             return s;
         }
-        private void simplify()
+
+        private void Simplify()
         {
             double A = this.A; double B = this.B; double divider = this.divider;
             double[] digits = { 2, 3, 5, 7 };
@@ -80,6 +89,7 @@ namespace HumanCarInterfaceLaba2
             {
                 if (A % digit == 0 && B % digit == 0 && divider % digit == 0)
                 {
+                    
                     while (A % digit == 0 && B % digit == 0 && divider % digit == 0)
                     {
                         A /= digit;B /= digit; divider /= digit;
@@ -96,12 +106,28 @@ namespace HumanCarInterfaceLaba2
 
         private void btnSmplf_Click(object sender, EventArgs e)
         {
-            simplify();
+            Simplify();
             btnReverse_Click(this.btnReverse, new EventArgs());
+            toolStripFirstLabel.Text = "Выполнена попытка упростить дробь.";
         }
+
         private void SetInputLabelText(string text)
         {
             lblInput.Text = "Исходное число: " + text;
+        }
+
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ThreadStart tS = new ThreadStart(delegate { Application.Run(new frmAbout()); });
+            Thread t = new Thread(tS);
+            t.Start();
+        }
+
+        private void helpToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ThreadStart tS = new ThreadStart(delegate { Application.Run(new frmHelp()); });
+            Thread t = new Thread(tS);
+            t.Start();
         }
     }
 }
